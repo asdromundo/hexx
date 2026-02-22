@@ -11,7 +11,7 @@ struct SingletonRegisterPlugin {
 impl IEditorPlugin for SingletonRegisterPlugin {
     fn enter_tree(&mut self) {
         self.base_mut()
-            .add_autoload_singleton("GlobalBevySingleton", "res://bevy_singleton.tscn");
+            .add_autoload_singleton("GlobalBevySingleton", "res://scenes/ecs/bevy_singleton.tscn");
 
         // Perform typical plugin operations here.
     }

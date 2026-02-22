@@ -47,26 +47,22 @@ pub fn hex_to_point2d(layout: &HexLayout, hex: Hex) -> Vector2 {
 /// Uses the axial rounding algorithm to find the nearest hex coordinate
 /// from potentially fractional values.
 pub fn axial_round(x: f32, y: f32) -> (i32, i32) {
-    let mut x = x;
-    let mut y = y;
-    
     let xgrid = x.round() as i32;
     let ygrid = y.round() as i32;
 
-    x -= xgrid as f32;
-    y -= ygrid as f32;
+    let xf = x - xgrid as f32;
+    let yf = y - ygrid as f32;
 
-    if x.abs() >= y.abs() {
-        (
-            xgrid + (x + 0.5 * y).round() as i32,
-            ygrid,
-        )
-    } else {
-        (
-            xgrid,
-            ygrid + (y + 0.5 * x).round() as i32,
-        )
-    }
+    let mx = (xf.abs() >= yf.abs()) as i32;
+    let my = 1 - mx;
+
+    let rx = (xf + 0.5 * yf).round() as i32;
+    let ry = (yf + 0.5 * xf).round() as i32;
+
+    (
+        xgrid + mx * rx,
+        ygrid + my * ry,
+    )
 }
 
 /// Convert pixel coordinates to the nearest hexagonal coordinate.
@@ -107,17 +103,16 @@ pub fn hex_corner_offset(layout: &HexLayout, corner: usize) -> Vector2 {
 ///
 /// Generates the 6 corner positions for a hexagon in pixel space.
 /// The result includes a 7th element that repeats the first corner to close the polygon.
-pub fn hex_corners(layout: &HexLayout, hex: Hex) -> Vec<Vector2> {
-    let mut corners = Vec::with_capacity(7);
+pub fn hex_corners(layout: &HexLayout, hex: Hex) -> [Vector2; 7] {
+    let mut corners = [Vector2::ZERO; 7];
     let center = hex_to_point2d(layout, hex);
-    
     for i in 0..6 {
         let offset = hex_corner_offset(layout, i);
-        corners.push(center + offset);
+        corners[i] = center + offset;
     }
     
     // Close the loop
-    corners.push(corners[0]);
+    corners[6] = corners[0];
     
     corners
 }
