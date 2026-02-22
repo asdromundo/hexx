@@ -7,9 +7,10 @@ edition = "2024"
 crate-type = ["cdylib"] # Compile this crate to a dynamic C library.
 
 [dependencies]
-bevy_ecs = "0.18.0"
 # Update to the latest stable gdext when possible.
 godot = { git = "https://github.com/godot-rust/gdext", tag = "v0.4.5" }
+bevy_ecs = "~0.18.0"
+hexx = {version = "~0.24.0", default-features = false, features = ["bevy_ecs"]}
 
 [features]
 # Ensure that enabling `nothreads` for the main crate also enables

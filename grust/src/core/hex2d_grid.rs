@@ -1,19 +1,12 @@
-use crate::core::hex::{
-    Hex,
-    layout::HexLayout,
-    math::{self, neighbors},
-    orientation::HexOrientation,
-};
 use godot::prelude::*;
+use hexx::*;
 use std::collections::HashSet;
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Hex2DGrid {
     base: Base<Node2D>,
-    hex_grid: Vec<Hex>,
-    hex_grid_corners: Vec<PackedVector2Array>,
-    hex_layout: HexLayout,
+    layout: HexLayout,
     map: HashSet<Hex>,
     corners: Vec<PackedVector2Array>,
 }
@@ -23,34 +16,24 @@ impl INode2D for Hex2DGrid {
     fn init(base: Base<Node2D>) -> Self {
         Hex2DGrid {
             base,
-            hex_grid: Vec::new(),
-            hex_grid_corners: Vec::new(),
-            hex_layout: HexLayout::new(
-                HexOrientation::POINTY,
-                Vector2::new(32.0, 32.0),
-                Vector2::new(550.0, 320.0),
-            ),
+            layout: HexLayout {
+                scale: Vec2::new(32.0, 32.0),
+                orientation: HexOrientation::Pointy,
+                origin: Vec2::new(550.0, 320.0),
+            },
             map: HashSet::new(),
             corners: Vec::new(),
         }
     }
 
     fn ready(&mut self) {
-        let hex = Hex::new(0, 0);
-        self.hex_grid.push(hex);
-        self.hex_grid.extend(neighbors(hex));
-
-        for i in 0..self.hex_grid.len() {
-            let hex = self.hex_grid[i];
-            let corners = math::hex_corners(&self.hex_layout, hex);
-            self.hex_grid_corners
-                .insert(i, PackedVector2Array::from(corners));
-        }
 
         self.map = rect_pointy_grid(-5, 5, -5, 5);
         for hex in &self.map {
-            let corners = math::hex_corners(&self.hex_layout, *hex);
-            self.corners.push(PackedVector2Array::from(corners));
+            let corners = HexLayout::hex_corners(&self.layout, *hex);
+            let mut godot_corners = corners.iter().map(|c| Vector2::new(c.x, c.y)).collect::<Vec<_>>();
+            godot_corners.push(godot_corners[0]); // Close the loop for drawing
+            self.corners.push(PackedVector2Array::from(godot_corners));
         }
     }
 
@@ -60,10 +43,6 @@ impl INode2D for Hex2DGrid {
         self.draw_hex_grid(&tmp_corners);
         // You shall not pass! (until we put the corners back)
         self.corners = tmp_corners;
-
-        // let corners_list = std::mem::take(&mut self.hex_grid_corners);
-        // self.draw_hex_grid(&corners_list);
-        // self.hex_grid_corners = corners_list;
     }
 }
 
