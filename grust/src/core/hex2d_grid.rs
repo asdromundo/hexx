@@ -1,5 +1,8 @@
-use godot::prelude::*;
-use hexx::*;
+use godot::register::*;
+use godot::obj::{Base, WithBaseField};
+use godot::builtin::{PackedArray, PackedVector2Array, Vector2, Color};
+use godot::classes::{INode2D, Node2D};
+use hexx::{HexLayout, Hex, Vec2, HexOrientation};
 use std::collections::HashSet;
 
 #[derive(GodotClass)]
