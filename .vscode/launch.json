@@ -1,0 +1,17 @@
+// ./.vscode/launch.json
+{
+    "configurations": [
+        {
+            "name": "Debug Project (Godot 4)",
+            "type": "lldb", // type provided by CodeLLDB extension
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build-rust",
+            "args": [
+                "-w" // windowed mode
+                // "-e": editor does not keep breakpoints; thus not listed here.
+            ],
+            "program": "C:/Users/White Terk/Documents/Godot/Engine/godot4.exe"
+        }
+    ]
+}

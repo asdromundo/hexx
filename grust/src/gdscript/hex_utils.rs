@@ -3,15 +3,14 @@ use std::collections::HashSet;
 use godot::classes::mesh::ArrayType;
 use godot::obj::IndexEnum;
 use godot::prelude::*;
-use hexx::{HexLayout, MeshInfo};
+use hexx::{ColumnMeshBuilder, HexLayout, MeshInfo, Vec2, Vec3};
 
 #[derive(GodotClass)]
 #[class(init, base=RefCounted)]
 pub struct HexGridUtils;
 
 #[godot_api]
-impl HexGridUtils {
-}
+impl HexGridUtils {}
 
 impl HexGridUtils {
     pub(crate) fn build_surface_arrays(mesh_info: MeshInfo) -> VarArray {
@@ -49,16 +48,40 @@ impl HexGridUtils {
         arrays
     }
 
-    pub(crate) fn new_rect_map(layout: &HexLayout, offset: Vector4i) -> HashSet<hexx::Hex> {
-        let mut map = HashSet::new();
+    pub(crate) fn new_rect_map(offset: Vector4i) -> HashSet<hexx::Hex> {
+        //         let mut map = HashSet::new();
+        // for r in offset.z..=offset.w {
+        //     let r_offset = r >> 1; // r_offset = floor(r/2)
+        //     for q in offset.x - r_offset..=offset.y - r_offset {
+        //         map.insert(hexx::hex(q, r));
+        //     }
+        // }
+        // map
+        
+        // Functional implementation of the above nested loops:
+        (offset.z..=offset.w)
+            .flat_map(|r| {
+                let r_offset = r >> 1; // r_offset = floor(r/2)
+                (offset.x - r_offset..=offset.y - r_offset).map(move |q| hexx::hex(q, r))
+            })
+            .collect::<HashSet<hexx::Hex>>()
+    }
 
-        for r in offset.z..=offset.w {
-            let r_offset = r >> 1; // r_offset = floor(r/2)
-            for q in offset.x - r_offset..=offset.y - r_offset {
-                map.insert(hexx::hex(q, r));
-            }
+    pub(crate) fn layout2d_to_3d(layout: &HexLayout, scale_3d: Vector3) -> HexLayout {
+        HexLayout {
+            orientation: layout.orientation,
+            origin: layout.origin,
+            scale: Vec2 {
+                x: scale_3d.x,
+                y: scale_3d.y,
+            },
         }
+    }
 
-        map
+    pub(crate) fn hex_to_column_mesh(layout_3d: &HexLayout, hex: &hexx::Hex, height: f32) -> MeshInfo {
+        ColumnMeshBuilder::new(&layout_3d, height)
+            .at(*hex)
+            .facing(Vec3::Y)
+            .build()
     }
 }
