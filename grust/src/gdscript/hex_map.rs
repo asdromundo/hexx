@@ -46,7 +46,7 @@ impl HexMap {
             scale,
         };
 
-        let map = HexGridUtils::new_rect_map(limits);
+        let map = HexGridUtils::new_rect_map(&layout,limits);
         Gd::from_init_fn(|base| Self {
             base,
             layout,
@@ -58,6 +58,17 @@ impl HexMap {
                 SCALE_3D_FROM_2D,
             ),
         })
+    }
+
+    #[func]
+    fn map_to_vector2_array(&self) -> PackedVector2Array {
+        self.map
+            .iter()
+            .map(|hex| {
+                let pos = self.layout.hex_to_world_pos(*hex) * SCALE_3D_FROM_2D;
+                Vector2::new(pos.x, pos.y)
+            })
+            .collect()
     }
 
     #[func]
@@ -102,7 +113,7 @@ impl HexMap {
             .at(*hex)
             .facing(Vec3::Y)
             .build();
-        godot_print!("Mesh info for hex {:?}: {:?}", hex, mesh_info);
+
         HexGridUtils::build_surface_arrays(mesh_info)
     }
 

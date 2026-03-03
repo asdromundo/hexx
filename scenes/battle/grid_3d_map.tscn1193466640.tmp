@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cx6p2l310vac" path="res://scenes/battle/grid_3d_map.gd" id="1_jp4o0"]
 [ext_resource type="Script" uid="uid://cf71nvj2v0kat" path="res://scripts/free_look_camera_controller.gd" id="2_pavyk"]
+[ext_resource type="PackedScene" uid="uid://2d7ev0y4fmvv" path="res://assets/Base_Triangle.glb" id="3_vecni"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pavyk"]
 sky_top_color = Color(0, 0.41112906, 0.92703235, 1)
@@ -33,4 +34,10 @@ transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 2, 1)
 script = ExtResource("2_pavyk")
 metadata/_custom_type_script = "uid://cf71nvj2v0kat"
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1064359451]
+
 [node name="BevySingleton" type="BevySingleton" parent="." unique_id=2068357569]
+
+[node name="Base_Triangle" parent="." unique_id=2011016609 instance=ExtResource("3_vecni")]
+
+[node name="Base_Triangle2" parent="." unique_id=1422208406 instance=ExtResource("3_vecni")]

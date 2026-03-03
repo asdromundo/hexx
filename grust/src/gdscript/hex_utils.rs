@@ -48,23 +48,47 @@ impl HexGridUtils {
         arrays
     }
 
-    pub(crate) fn new_rect_map(offset: Vector4i) -> HashSet<hexx::Hex> {
-        //         let mut map = HashSet::new();
-        // for r in offset.z..=offset.w {
-        //     let r_offset = r >> 1; // r_offset = floor(r/2)
-        //     for q in offset.x - r_offset..=offset.y - r_offset {
-        //         map.insert(hexx::hex(q, r));
-        //     }
-        // }
-        // map
-        
-        // Functional implementation of the above nested loops:
-        (offset.z..=offset.w)
-            .flat_map(|r| {
-                let r_offset = r >> 1; // r_offset = floor(r/2)
-                (offset.x - r_offset..=offset.y - r_offset).map(move |q| hexx::hex(q, r))
-            })
-            .collect::<HashSet<hexx::Hex>>()
+    /// Creates a rectangular hex map based on the provided layout and limits.
+    /// The limits are defined as (left, right, top, down) and will be adjusted based on the hex orientation.
+    /// This is based on the RedBlob Games article: https://www.redblobgames.com/grids/hexagons/implementation.html#shape-rectangle
+    pub(crate) fn new_rect_map(layout: &HexLayout, offset: Vector4i) -> HashSet<hexx::Hex> {
+        match layout.orientation {
+            hexx::HexOrientation::Pointy => {
+                // let mut map = HashSet::new();
+                // for r in offset.z..=offset.w {
+                //     let r_offset = r >> 1; // r_offset = floor(r/2)
+                //     for q in offset.x - r_offset..=offset.y - r_offset {
+                //         map.insert(hexx::hex(q, r));
+                //     }
+                // }
+                // map
+
+                // Functional implementation of the above nested loops:
+                (offset.z..=offset.w)
+                    .flat_map(|r| {
+                        let r_offset = r >> 1; // r_offset = floor(r/2)
+                        (offset.x - r_offset..=offset.y - r_offset).map(move |q| hexx::hex(q, r))
+                    })
+                    .collect::<HashSet<hexx::Hex>>()
+            }
+            hexx::HexOrientation::Flat => {
+                // let mut map = HashSet::new();
+                // for q in offset.x..=offset.y {
+                //     let q_offset = q >> 1; // r_offset = floor(q/2)
+                //     for r in offset.z - q_offset..=offset.w - q_offset {
+                //         map.insert(hexx::hex(q, r));
+                //     }
+                // }
+                // map
+
+                (offset.x..=offset.y)
+                    .flat_map(|q| {
+                        let q_offset = q >> 1; // r_offset = floor(q/2)
+                        (offset.z - q_offset..=offset.w - q_offset).map(move |r| hexx::hex(q, r))
+                    })
+                    .collect::<HashSet<hexx::Hex>>()
+            }
+        }
     }
 
     pub(crate) fn layout2d_to_3d(layout: &HexLayout, scale_3d: Vector3) -> HexLayout {
@@ -78,7 +102,11 @@ impl HexGridUtils {
         }
     }
 
-    pub(crate) fn hex_to_column_mesh(layout_3d: &HexLayout, hex: &hexx::Hex, height: f32) -> MeshInfo {
+    pub(crate) fn hex_to_column_mesh(
+        layout_3d: &HexLayout,
+        hex: &hexx::Hex,
+        height: f32,
+    ) -> MeshInfo {
         ColumnMeshBuilder::new(&layout_3d, height)
             .at(*hex)
             .facing(Vec3::Y)

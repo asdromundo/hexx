@@ -3,12 +3,17 @@ extends Node3D
 
 @export var pointy_orientation: bool = true
 @export var origin: Vector2 = Vector2.ZERO
-@export var map_scale: Vector2 = Vector2.ONE
-@export var limits: Vector4i = Vector4i(-10, 10, -10, 10)
+@export var map_scale: Vector2 = Vector2(32.0,32.0)
+@export var limits: Vector4i = Vector4i(-1, 1, -1, 1)
 @onready var map: HexMap = HexMap.new_from(self.pointy_orientation, self.origin, self.map_scale, self.limits)
 
 func _ready() -> void:
+	#_render_hex_map()
+	var grid_origins := map.map_to_vector2_array()
+	for coord in grid_origins:
+		_render_hex(coord)
 
+func _render_hex_map() -> void:
 	var map_arr	:= map.map_to_column_mesh()
 
 	var map_mesh := ArrayMesh.new()
@@ -23,3 +28,7 @@ func _ready() -> void:
 	mesh_instance.scale = Vector3.ONE
 	
 	add_child(mesh_instance)
+
+func _render_hex(p_origin: Vector2) -> void:
+	for direction in MockHex.Direction.values():
+		MockHex.render_triangle(self, self.pointy_orientation, p_origin, direction, MockHex.Terrain.BASE)

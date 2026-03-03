@@ -17,13 +17,13 @@ run/main_scene="uid://buiqwga6drsg0"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="uid://dl0701ikiyhue"
 
-[autoload]
-
-GlobalBevySingleton="*uid://bkc31t2ntvo1b"
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/rust_tools/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [rendering]
 

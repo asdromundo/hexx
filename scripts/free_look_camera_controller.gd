@@ -5,7 +5,7 @@ const SHIFT_MULTIPLIER = 2.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
 
 
-@export_range(0.0, 1.0) var sensitivity: float = 0.1
+@export_range(0.0, 1.0) var sensitivity: float = 0.25
 
 # Mouse state
 var _mouse_position = Vector2(0.0, 0.0)
@@ -83,7 +83,7 @@ func _update_movement(delta):
 		+ _velocity.normalized() * _deceleration * _vel_multiplier * delta
 	
 	# Compute modifiers' speed multiplier
-	var speed_multi = 0.25
+	var speed_multi = 1
 	if _shift: speed_multi *= SHIFT_MULTIPLIER
 	if _alt: speed_multi *= ALT_MULTIPLIER
 	
