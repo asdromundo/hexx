@@ -1,1 +1,1 @@
-mod hex2d_grid;
+pub(crate) mod terrain;

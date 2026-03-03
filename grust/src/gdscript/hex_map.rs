@@ -60,12 +60,14 @@ impl HexMap {
         })
     }
 
+    /// Returns an ordered Vector2 from the internal HashSet of Hexes, where each Vector2 is the world position of the corresponding Hex.
     #[func]
     fn map_to_vector2_array(&self) -> PackedVector2Array {
-        self.map
-            .iter()
+        let mut hexes: Vec<hexx::Hex> = self.map.iter().copied().collect();
+        hexes.sort_by_key(|hex| (hex.x, hex.y));
+        hexes.into_iter()
             .map(|hex| {
-                let pos = self.layout.hex_to_world_pos(*hex) * SCALE_3D_FROM_2D;
+                let pos = self.layout.hex_to_world_pos(hex) * SCALE_3D_FROM_2D;
                 Vector2::new(pos.x, pos.y)
             })
             .collect()
