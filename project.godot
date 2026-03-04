@@ -17,6 +17,10 @@ run/main_scene="uid://buiqwga6drsg0"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="uid://dl0701ikiyhue"
 
+[autoload]
+
+MeshAssetRegistry="*uid://bxgocptx1v3cf"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/rust_tools/plugin.cfg")
@@ -27,6 +31,7 @@ import/blender/enabled=false
 
 [rendering]
 
+rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 

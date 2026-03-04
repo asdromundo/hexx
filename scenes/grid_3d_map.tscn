@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://buiqwga6drsg0"]
+
+[ext_resource type="Script" uid="uid://dnkwyb2ql6txt" path="res://scripts/Grid3DMap.gd" id="1_rigd6"]
+[ext_resource type="Script" uid="uid://cf71nvj2v0kat" path="res://scripts/world/free_look_camera_controller.gd" id="2_pavyk"]
+[ext_resource type="Script" uid="uid://lhdtvfwski6h" path="res://scripts/HexRenderer.gd" id="3_timnc"]
+[ext_resource type="Script" uid="uid://bkflh2teh74a3" path="res://scripts/HexDebugOverlay.gd" id="4_fuqsp"]
+[ext_resource type="PackedScene" uid="uid://b0gur7b1uu0pe" path="res://assets/meshes/terrain/grass_flat_a.glb" id="4_kysin"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pavyk"]
+sky_top_color = Color(0, 0.41112906, 0.92703235, 1)
+sky_horizon_color = Color(0.4814235, 0.5981117, 0.7096654, 1)
+ground_bottom_color = Color(0.13694152, 0.19256526, 0.12287704, 1)
+ground_horizon_color = Color(0.4814235, 0.5981117, 0.7096654, 1)
+
+[sub_resource type="Sky" id="Sky_vecni"]
+sky_material = SubResource("ProceduralSkyMaterial_pavyk")
+
+[sub_resource type="Environment" id="Environment_e2odu"]
+background_mode = 2
+sky = SubResource("Sky_vecni")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Grid3DMap" type="Node3D" unique_id=1055260400]
+script = ExtResource("1_rigd6")
+limits = Vector4i(0, 6, 0, 4)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=295257836]
+environment = SubResource("Environment_e2odu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=690977239]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="FreeLookCamera" type="Camera3D" parent="." unique_id=258658267]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 5, 5, 10)
+script = ExtResource("2_pavyk")
+metadata/_custom_type_script = "uid://cf71nvj2v0kat"
+
+[node name="BevySingleton" type="BevySingleton" parent="." unique_id=2068357569]
+
+[node name="HexRenderer" type="Node" parent="." unique_id=857983664 node_paths=PackedStringArray("hex_root")]
+script = ExtResource("3_timnc")
+hex_root = NodePath("../Node3D")
+metadata/_custom_type_script = "uid://lhdtvfwski6h"
+
+[node name="MapGeneratorNode" type="MapGeneratorNode" parent="." unique_id=1047135901]
+
+[node name="HexDebugOverlay" type="Node3D" parent="." unique_id=1979128931]
+script = ExtResource("4_fuqsp")
+label_y_offset = 1.0
+metadata/_custom_type_script = "uid://bkflh2teh74a3"
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1046711217]
+
+[node name="grass_flat_a" parent="." unique_id=1180260160 instance=ExtResource("4_kysin")]

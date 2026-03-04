@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use godot::classes::mesh::ArrayType;
 use godot::obj::IndexEnum;
 use godot::prelude::*;
-use hexx::{ColumnMeshBuilder, HexLayout, MeshInfo, Vec2, Vec3};
+use hexx::{HexLayout, MeshInfo, Vec2};
 
 #[derive(GodotClass)]
 #[class(init, base=RefCounted)]
@@ -100,16 +100,5 @@ impl HexGridUtils {
                 y: scale_3d.y,
             },
         }
-    }
-
-    pub(crate) fn hex_to_column_mesh(
-        layout_3d: &HexLayout,
-        hex: &hexx::Hex,
-        height: f32,
-    ) -> MeshInfo {
-        ColumnMeshBuilder::new(&layout_3d, height)
-            .at(*hex)
-            .facing(Vec3::Y)
-            .build()
     }
 }
