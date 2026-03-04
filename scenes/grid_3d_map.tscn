@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cf71nvj2v0kat" path="res://scripts/world/free_look_camera_controller.gd" id="2_pavyk"]
 [ext_resource type="Script" uid="uid://lhdtvfwski6h" path="res://scripts/HexRenderer.gd" id="3_timnc"]
 [ext_resource type="Script" uid="uid://bkflh2teh74a3" path="res://scripts/HexDebugOverlay.gd" id="4_fuqsp"]
-[ext_resource type="PackedScene" uid="uid://b0gur7b1uu0pe" path="res://assets/meshes/terrain/grass_flat_a.glb" id="4_kysin"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pavyk"]
 sky_top_color = Color(0, 0.41112906, 0.92703235, 1)
@@ -48,9 +47,8 @@ metadata/_custom_type_script = "uid://lhdtvfwski6h"
 
 [node name="HexDebugOverlay" type="Node3D" parent="." unique_id=1979128931]
 script = ExtResource("4_fuqsp")
-label_y_offset = 1.0
+label_y_offset = 1.5
+marker_scale = 0.15
 metadata/_custom_type_script = "uid://bkflh2teh74a3"
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1046711217]
-
-[node name="grass_flat_a" parent="." unique_id=1180260160 instance=ExtResource("4_kysin")]

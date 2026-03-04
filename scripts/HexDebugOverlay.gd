@@ -9,11 +9,12 @@ extends Node3D
 
 @export var enabled: bool = true
 ## How high above the hex surface to float the labels.
-@export var label_y_offset: float = 0.5
+@export var label_y_offset: float = 1.0
 ## Scale of the direction arrow markers.
-@export var marker_scale: float = 0.08
+@export var marker_scale: float = .1
 
 ## Biome index → human label. Extend if you add biomes.
+## Must match Biome enum discriminant order.
 const BIOME_NAMES: Array[String] = ["Grass", "Water"]
 
 ## Direction index → short name (hexx flat convention).
@@ -55,8 +56,9 @@ func draw(
 		var biome_idx: int  = map_data.biome_at(i)
 		var biome_name: String = BIOME_NAMES[biome_idx] if biome_idx < BIOME_NAMES.size() else str(biome_idx)
 
+		var elevation: int = map_data.elevation_at(i)
 		var label := Label3D.new()
-		label.text = "(%d,%d)\n%s" % [coord.x, coord.y, biome_name]
+		label.text = "(%d,%d)\n%s  h:%d" % [coord.x, coord.y, biome_name, elevation]
 		label.font_size = 64
 		label.modulate = Color.WHITE
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -80,8 +82,8 @@ func draw(
 
 			var marker := MeshInstance3D.new()
 			var sphere := SphereMesh.new()
-			sphere.radius = marker_scale
-			sphere.height = marker_scale * 2.0
+			sphere.radius = marker_scale / 2.0
+			sphere.height = marker_scale
 			marker.mesh = sphere
 
 			var mat := StandardMaterial3D.new()
@@ -94,7 +96,7 @@ func draw(
 			# Label the direction
 			var dir_label := Label3D.new()
 			dir_label.text = "%s(%d)" % [dir_names[d], d]
-			dir_label.font_size = 48
+			dir_label.font_size = 24
 			dir_label.modulate = DIR_COLORS[d]
 			dir_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 			dir_label.pixel_size = 0.002

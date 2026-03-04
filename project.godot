@@ -21,6 +21,11 @@ config/icon="uid://dl0701ikiyhue"
 
 MeshAssetRegistry="*uid://bxgocptx1v3cf"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/rust_tools/plugin.cfg")

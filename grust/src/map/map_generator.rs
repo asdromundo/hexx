@@ -137,7 +137,7 @@ fn assign_biome(seed: u64, index: usize) -> Biome {
         .wrapping_add(index as u64)
         .wrapping_mul(6364136223846793005)
         .wrapping_add(1442695040888963407);
-    let n = ((state >> 33) as usize) % 2; // 2 = number of Biome variants
+    let n = ((state >> 33) as usize) % Biome::COUNT;
     match n {
         0 => Biome::Grass,
         _ => Biome::Water,
